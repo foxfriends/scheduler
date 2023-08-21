@@ -56,7 +56,7 @@ router.post(
           "Game Type": "REGULAR",
           Title: League,
           Home: League,
-          Away: League,
+          Away: "",
           Date: date.toFormat("dd/MM/yyyy"),
           Time,
           Duration,
