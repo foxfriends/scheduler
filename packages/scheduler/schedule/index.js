@@ -73,6 +73,6 @@ exports.main = async function main({ start, end, file }) {
   }
   return {
     headers: { "Content-Type": "application/zip" },
-    body: await zip.generateAsync(),
+    body: await zip.generateAsync({ type: "base64" }),
   };
 }
