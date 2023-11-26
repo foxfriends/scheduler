@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Scheduler</title>
@@ -12,13 +12,51 @@
     </style>
   </head>
   <body>
-    <form action="/actions/schedule/" method="POST" enctype="multipart/form-data">
-      <label>Start date: <input type="date" name="start" placeholder="Start Date" /></label>
-      <label>End date: <input type="date" name="end" placeholder="End Date"/></label>
+    <form enctype="multipart/form-data">
+      <label>
+        Start date: <input type="date" name="start" placeholder="Start Date" />
+      </label>
+      <label>
+        End date: <input type="date" name="end" placeholder="End Date" />
+      </label>
       <input type="file" accept="text/csv" name="file" />
-      <button type="submit">
-        Submit
-      </button>
+      <button type="submit">Submit</button>
     </form>
+
+    <script>
+      const form = document.querySelector("form");
+
+      function readFile(file) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.addEventListener("load", () => resolve(reader.result));
+          reader.readAsText(file);
+        });
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        const file = await readFile(data.get("file"));
+        const action =
+          "https://faas-tor1-70ca848e.doserverless.co/api/v1/web/fn-0ce66b73-2f68-4678-ba3f-dfdf0c50fc79/scheduler/schedule";
+        const response = await fetch(action, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            start: data.get("start"),
+            end: data.get("end"),
+            file,
+          }),
+        });
+        const contents = await response.blob();
+        const url = URL.createObjectURL(contents);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "schedule.zip";
+        link.click();
+        URL.revokeObjectURL(url);
+      });
+    </script>
   </body>
 </html>
