@@ -7,7 +7,15 @@ const { DateTime, Duration } = require("luxon");
 
 const WEEK = Duration.fromObject({ days: 7 });
 
-exports.main = async function main({ start, end, file }) {
+exports.main = async function main({ start, end, file, http }) {
+  if (http.method === "OPTIONS") {
+    return {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+  }
+
   const startDate = DateTime.fromISO(start);
   const endDate = DateTime.fromISO(end);
   const parser = parse(file, { encoding: "utf8", columns: true });
@@ -72,7 +80,10 @@ exports.main = async function main({ start, end, file }) {
     zip.file(`${League}.csv`, output);
   }
   return {
-    headers: { "Content-Type": "application/zip" },
+    headers: {
+      "Content-Type": "application/zip",
+      "Access-Control-Allow-Origin": "*",
+    },
     body: await zip.generateAsync({ type: "base64" }),
   };
-}
+};
