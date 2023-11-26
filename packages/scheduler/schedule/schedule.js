@@ -7,10 +7,10 @@ import { DateTime, Duration } from "luxon";
 
 const WEEK = Duration.fromObject({ days: 7 });
 
-export async function main({ start, end, contents }) {
+export async function main({ start, end, file }) {
   const startDate = DateTime.fromISO(start);
   const endDate = DateTime.fromISO(end);
-  const parser = parse(contents, { encoding: "utf8", columns: true });
+  const parser = parse(file, { encoding: "utf8", columns: true });
 
   const zip = new JSZip();
 
