@@ -1,2 +1,2 @@
 FROM scratch
-COPY index.html /public/
+COPY docs/index.html /public/
