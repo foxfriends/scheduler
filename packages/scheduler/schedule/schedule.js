@@ -1,13 +1,13 @@
-import { fileURLToPath } from "node:url";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
-import { parse, stringify } from "csv";
-import JSZip from "jszip";
-import { DateTime, Duration } from "luxon";
+const { fileURLToPath } = require("node:url");
+const { readFile } = require("node:fs/promises");
+const { join } = require("node:path");
+const { parse, stringify } = require("csv");
+const JSZip = require("jszip");
+const { DateTime, Duration } = require("luxon");
 
 const WEEK = Duration.fromObject({ days: 7 });
 
-export async function main({ start, end, file }) {
+exports.main = async function main({ start, end, file }) {
   const startDate = DateTime.fromISO(start);
   const endDate = DateTime.fromISO(end);
   const parser = parse(file, { encoding: "utf8", columns: true });
